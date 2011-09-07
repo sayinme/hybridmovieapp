@@ -1,8 +1,51 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>PhoneGap</title>
-	  <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
+    <title>MovieSearchApp</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
+	  
+	  <script>
+	  	$(function(){
+		  	$("#callXML").click(function(){
+			  	var movieName = $.trim($("#movieName").val());
+			    alert(movieName);
+			  	if(theName.length > 0)
+			  	{
+				  	$.ajax({
+					  	type:"GET",
+						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
+						dataType: "xml",
+						success: parseXml
+				  	});
+			  	}
+		  	});
+
+		  	$("resultlist").ajaxError(function(event, request, settings, exception){
+			  	$("resultlist").html("Error Calling: " + settings.url + "<br/>HTTP Code: " + request.status);
+		  	});
+
+		  	function onSuccess(data)
+		  	{
+			  	$("#result").html("Result: " + data);
+		  	}
+
+		  	function parseXml(xml)
+		  	{
+			  	$(xml).find("item").each(function()
+			  	{
+				  	$("#resultlist").append("<li>" + $(this).find("K").text()+"</li>");
+				  	$("#resultlist").listview('refresh');
+			  	});
+		  	}
+	  	});
+	  </script>
+	  
 	  <script type="text/javascript" charset="utf-8">
 	  	function onLoad(){
 		  	document.addEventListener("deviceready",onDeviceReady,true);
@@ -11,9 +54,44 @@
 		  	navigator.notification.alert("PhonGap is working");
 	  	}
 	  </script>  
+	  
+	  <style type="text/css">
+	  	h1{
+	  		text-align: center;
+	  		color: green;
+	  	}
+	  	form{
+	  		align: center;
+	  	}
+	  	p{
+	  		font-size: 13px;
+	  	}
+	  	
+	  </style>
   </head>
-  <body onload="onLoad();">
-  	<h1>Welcome to PhonGap</h1>
-  	<h2>Edit assets/www/index.html</h2>
+  <body> <!-- onload="onLoad();" -->
+  	<div data-role="page" id="indexPage">
+	  	
+	  	<div data-role="header">
+	  		<h1>Naver with Jquery</h1>
+	  	</div>
+	  	
+	  	<div data-role="content">
+	  		<div data-role="fieldcontain">
+	  			<input type="text" id="movieName" name="movieName" value="" autocomplete="on" >
+	  		</div>
+			<input id="callXML" type="button" value="Search"/>
+			<div id="result">
+				<ul data-role="listview" id="resultlist" name="resultlist">
+				</ul>
+			</div>
+	   	</div>
+	   	
+	   	<div data-role="footer" class="footer-docs" data-theme="c">
+	   		<p>&copy; Jquery Ajax Demo</p>
+	   	</div>
+	   	
+   	</div>
+   	
   </body>
 </html>
