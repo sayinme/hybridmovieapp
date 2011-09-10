@@ -2,9 +2,9 @@
 <html>
   <head>
     <title>MovieSearchApp</title>
+	<!-- 화면 확대비율을 기기 사이즈 가로에 맞게 조정 -->	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
 	
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
@@ -14,8 +14,8 @@
 	  	$(function(){
 		  	$("#callXML").click(function(){
 			  	var movieName = $.trim($("#movieName").val());
-			    alert(movieName);
-			  	if(theName.length > 0)
+			  	
+			  	if(movieName.length > 0)
 			  	{
 				  	$.ajax({
 					  	type:"GET",
@@ -24,19 +24,21 @@
 						success: parseXml
 				  	});
 			  	}
+			  	else
+			  		alert('please input text');
 		  	});
 
 		  	$("resultlist").ajaxError(function(event, request, settings, exception){
 			  	$("resultlist").html("Error Calling: " + settings.url + "<br/>HTTP Code: " + request.status);
 		  	});
 
-		  	function onSuccess(data)
+		  	function onSuccess(xml)
 		  	{
-			  	$("#result").html("Result: " + data);
+			  	$("#result").html("Result: " + xml);
 		  	}
 
 		  	function parseXml(xml)
-		  	{
+		  	{		  		
 			  	$(xml).find("item").each(function()
 			  	{
 				  	$("#resultlist").append("<li>" + $(this).find("K").text()+"</li>");
@@ -79,17 +81,18 @@
 	  	<div data-role="content">
 	  		<div data-role="fieldcontain">
 	  			<input type="text" id="movieName" name="movieName" value="" autocomplete="on" >
+	  			<input id="callXML" type="button" value="Search"/>
 	  		</div>
-			<input id="callXML" type="button" value="Search"/>
+			
 			<div id="result">
 				<ul data-role="listview" id="resultlist" name="resultlist">
 				</ul>
 			</div>
 	   	</div>
 	   	
-	   	<div data-role="footer" class="footer-docs" data-theme="c">
+	 <!-- <div data-role="footer" class="footer-docs" data-theme="c">
 	   		<p>&copy; Jquery Ajax Demo</p>
-	   	</div>
+	   	</div> -->
 	   	
    	</div>
    	
