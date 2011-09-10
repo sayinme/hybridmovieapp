@@ -10,7 +10,6 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
 	<!-- <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script> -->
-	  
 	<style type="text/css">
 	  	h1{
 	  		text-align: center;
@@ -19,28 +18,12 @@
 	  	
 	 </style>
 	    
-	  <script> 
+	 <script> 
  	  	$(function(){
-		  	$("#callXML").click(function(){
-		  		$("#resultlist").empty();
-			  	var movieName = $.trim($("#movieName").val());
-			  	if(movieName.length > 0)
-			  	{
-				  	$.ajax({
-					  	type:"GET",
-						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=" + movieName + "&display=10&start=1&target=movie" ,
-						dataType: "xml",
-						success: parseXml2
-				  	});
-			  	}
-			  	else
-			  		alert('please input text');
-		  	});
-		  	
-		  	$("#searchonline").click(function(){
+			$("#searchonline").click(function(){
+		  		alert('gg');
 				$("#resultlist").empty();
-				$("#inputsearch").hide();
-				$.ajax({
+			  	$.ajax({
 				  	type:"GET",
 					url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
 					dataType: "xml",
@@ -48,16 +31,12 @@
 			  	});
 		  	});
 		  	
-			$("#usersearch").click(function(){
-				$("#resultlist").empty();
-				$("#inputsearch").show();
-			});
 		  	$("#resultlist").ajaxError(function(event, request, settings, exception){
 			  	//("resultlist").html("Error Calling: " + settings.url + "<br/>HTTP Code: " + request.status);
 			  	alert('죄송합니다. 다시 시도하여 주시기 바랍니다.');
 		  	});
 
-		   function parseXml(xml)
+		  	function parseXml(xml)
 		  	{		  	
 		  		var i = 1;
 		  		var sign ;
@@ -85,47 +64,36 @@
 	  				});	
 	  			}
 		  		$("#resultlist").listview('refresh');
-		  	} 
-		  	
-		  	function parseXml2(xml)
-		  	{	
-			  	$(xml).find("item").each(function()
-			  	{
-				  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "'><img src='" + $(this).find("image").text() + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p></a></li>");
-				  	$("#resultlist").listview('refresh');
-			  	});
 		  	}
 	  	}); 
+	  	
 	  </script>
 	  
   </head>
   <body> <!-- onload="onLoad();" -->
-  	<div data-role="page" id="firstpage">
+  	
+  	<div data-role="page" id="secondpage">
 	  	
 	  	<div data-role="header">
 	  		<h1>Naver with Jquery</h1>
 	  	</div>
-	  	 
+	  	
 	  	<div data-role="content">
-	  		<div data-role="fieldcontain" id="inputsearch">
-	  			<input type="text" id="movieName" value="" autocomplete="on" >
-	  			<input id="callXML" type="button" value="Search"/>
-	  		</div>
-			
 			<div id="result">
 				<ul data-role="listview" id="resultlist" data-inset="true" data-split-theme="a">
 				</ul>
 			</div>
-	   	</div>
+		</div>
    		
    		<div data-role="footer" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
-		   			<li id="usersearch"><a href="#" data-icon="search">Search</a></li>
-		   			<li id="searchonline"><a href="#" data-icon="star">실시간검색</a></li>
+		   			<li id="usersearch"><a href="index.html"  data-icon="search">Search</a></li>
+		   			<li id="searchonline"><a href="#"  data-icon="star">실시간검색</a></li>
 				</ul>
 			</div>
 		</div> 
    	</div>
+   	
   </body>
 </html>
