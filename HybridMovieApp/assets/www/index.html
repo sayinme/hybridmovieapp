@@ -20,100 +20,159 @@
 	 </style>
 	    
 	  <script> 
- 	  	$(function(){
-		  	$("#callXML").click(function(){
+	   $("#[data-role=page]").live("pageshow",function(event) { 
+
+	          if(this.id == "searchonlinepage") { 
+				  $.ajax({
+					  	type:"GET",
+						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
+						dataType: "xml",
+						success: parseXml
+				  });	
+	          }
+	        
+	          function parseXml(xml)
+			  	{		  
+			  		var i = 1;
+			  		var sign ;
+			  		for(i=1; i<11; i++)
+			  		{
+		  				$(xml).find("R"+[i]).each(function()
+		  				{
+		  					if($(this).find("S").text() == "*")
+					  		{
+					  			sign = "same.png"	
+					  			$("#resultlist2").append("<li><img src='"+ i +".png'>" + $(this).find("K").text()+"<img src='" + sign +"'></li>");
+					  		}
+		  					else
+		  					{
+		  						if ($(this).find("S").text() == "+")
+						  		{
+						  			sign = "up.png"	
+						  		}
+						  		else if($(this).find("S").text() == "-")
+						  		{
+						  			sign = "down.png"
+						  		}
+					  			$("#resultlist2").append("<li><img src='"+ i +".png'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
+		  					}
+		  				});	
+		  			}
+			  		$("#resultlist2").listview('refresh');
+			  	} 
+	   });
+
+	   $("#[data-role=page]").live("pageshow",function(event) { 
+		   if(this.id == "arroundteatherpage") { 
+		   
+		   }
+	   });
+	   
+	   
+ 	  	$(function(){		  
+ 	  		var loadpage = 1;
+ 	  		var display = 0;
+ 	  		var movieName ='';
+ 	  		
+ 	  		function callAjax()
+		  	{
+		  		$.ajax({
+				  	type:"GET",
+					url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=" + movieName + "&display=10&start="+ loadpage +"&target=movie" ,
+					dataType: "xml",
+					success: parseXml2
+			  	});
+		  	}
+ 	  		
+ 	  		$("#callXML").click(function(){
 		  		$("#resultlist").empty();
-			  	var movieName = $.trim($("#movieName").val());
+		  		
+			  	movieName = $.trim($("#movieName").val());
 			  	if(movieName.length > 0)
 			  	{
-				  	$.ajax({
-					  	type:"GET",
-						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=" + movieName + "&display=10&start=1&target=movie" ,
-						dataType: "xml",
-						success: parseXml2
-				  	});
+				  	callAjax();
 			  	}
+			  
 			  	else
 			  		alert('please input text');
-		  	});
+		  	}); 
 		  	
-		  	$("#searchonline").click(function(){
-				$("#resultlist").empty();
-				$("#inputsearch").hide();
-				$.ajax({
-				  	type:"GET",
-					url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
-					dataType: "xml",
-					success: parseXml
-			  	});
-		  	});
-		  	
-			$("#usersearch").click(function(){
-				$("#resultlist").empty();
-				$("#inputsearch").show();
-			});
 		  	$("#resultlist").ajaxError(function(event, request, settings, exception){
 			  	//("resultlist").html("Error Calling: " + settings.url + "<br/>HTTP Code: " + request.status);
 			  	alert('죄송합니다. 다시 시도하여 주시기 바랍니다.');
 		  	});
 
-		   function parseXml(xml)
-		  	{		  	
-		  		var i = 1;
-		  		var sign ;
-		  		for(i=1; i<11; i++)
-		  		{
-	  				$(xml).find("R"+[i]).each(function()
-	  				{
-	  					if($(this).find("S").text() == "*")
-				  		{
-				  			sign = "same.png"	
-				  			$("#resultlist").append("<li><img src='"+ i +".png'>" + $(this).find("K").text()+"<img src='" + sign +"'></li>");
-				  		}
-	  					else
-	  					{
-	  						if ($(this).find("S").text() == "+")
-					  		{
-					  			sign = "up.png"	
-					  		}
-					  		else if($(this).find("S").text() == "-")
-					  		{
-					  			sign = "down.png"
-					  		}
-				  			$("#resultlist").append("<li><img src='"+ i +".png'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
-	  					}
-	  				});	
-	  			}
-		  		$("#resultlist").listview('refresh');
-		  	} 
-		  	
 		  	function parseXml2(xml)
 		  	{	
+		  		var imgurl = '';
 			  	$(xml).find("item").each(function()
 			  	{
-				  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "'><img src='" + $(this).find("image").text() + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p></a></li>");
-				  	$("#resultlist").listview('refresh');
+			  		if($(this).find("image").text() == '')
+			  		{
+			  			imgurl = "noimage.png";	
+			  		}
+			  		else
+			  		{
+			  			imgurl = $(this).find("image").text();
+			  		}
+				  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "' data-ajax=”false”><img src='" + imgurl + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p><img src='star.png'>" + $(this).find("userRating").text() + "</a></li>");
 			  	});
+			  	
+			  	if($(xml).find("total").text() > 10)
+			  	{
+			  		display = $(xml).find("display").text();
+			  		loadpage = loadpage + display;
+			  		
+			  		$("#resultlist").append("<li id=loadmore data-theme='b'>Load more..</li>");
+			  		$("#loadmore").click(function(){
+			  			$("#loadmore").remove();
+			  			callAjax();
+				  	});  		
+			  	}
+			  	
+		  		$("#resultlist").listview('refresh');
 		  	}
+		  	
 	  	}); 
 	  </script>
 	  
   </head>
   <body> <!-- onload="onLoad();" -->
-  	<div data-role="page" id="firstpage">
-	  	
+  	<div data-role="page" id="usersearchpage">
 	  	<div data-role="header">
 	  		<h1>Naver with Jquery</h1>
-	  	</div>
-	  	 
+	  	</div> 
 	  	<div data-role="content">
 	  		<div data-role="fieldcontain" id="inputsearch">
 	  			<input type="text" id="movieName" value="" autocomplete="on" >
 	  			<input id="callXML" type="button" value="Search"/>
 	  		</div>
-			
 			<div id="result">
 				<ul data-role="listview" id="resultlist" data-inset="true" data-split-theme="a">
+				</ul>
+			</div>
+	   	</div>
+   		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+		   			<li id="usersearch"><a href="#" data-icon="search">영화검색</a></li>
+		   			<li id="searchonline"><a href="#searchonlinepage" data-ajax = "false" data-icon="star">실시간순위</a></li>
+		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
+		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
+				</ul>
+			</div>
+		</div> 
+   	</div>
+
+   	<div data-role="page" id="searchonlinepage">
+	  	
+	  	<div data-role="header">
+	  		<h1>Naver with Jquery</h1>
+	  	</div> 
+	  	 
+	  	<div data-role="content">
+			<div id="result">
+				<ul data-role="listview" id="resultlist2" data-inset="true" data-split-theme="a">
 				</ul>
 			</div>
 	   	</div>
@@ -121,8 +180,74 @@
    		<div data-role="footer" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
-		   			<li id="usersearch"><a href="#" data-icon="search">Search</a></li>
-		   			<li id="searchonline"><a href="#" data-icon="star">실시간검색</a></li>
+		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
+		   			<li id="searchonline"><a href="#" data-icon="star">실시간순위</a></li>
+		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
+		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
+				</ul>
+			</div>
+		</div> 
+   	</div>
+   	
+   	<div data-role="page" id="reservecallpage">
+	  	
+	  	<div data-role="header">
+	  		<h1>Naver with Jquery</h1>
+	  	</div> 
+	  	 
+	  	<div data-role="content">
+			<div id="result">
+				<ul data-role="listview" id="tellist" data-inset="true" data-split-theme="a">
+				<li data-role="list-divider">전화예매</li>
+				<li><a href="tel:15442280">CGV</a></li> 
+				<li><a href="tel:15448855"> 롯데시네마</a></li> 
+				<li><a href="tel:15440600">메가박스</a></li>
+				</ul>
+				<br>
+				<br>
+				<a href="http://ticket.movie.naver.com/Ticket/Reserve.aspx" data-role="button" data-theme="b">네이버 인터넷 예매</a> 
+			</div>
+	   	</div>
+   		
+   		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
+		   			<li id="searchonline"><a href="#searchonlinepage" data-icon="star">실시간순위</a></li>
+		   			<li id="reservemovie"><a href="#" data-icon="check">영화예매</a></li>
+		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
+				</ul>
+			</div>
+		</div> 
+   	</div>
+   	
+   	<div data-role="page" id="arroundteatherpage">
+	  	
+	  	<div data-role="header">
+	  		<h1>Naver with Jquery</h1>
+	  	</div> 
+	  	 
+	  	<div data-role="content">
+			<div id="result">
+				<ul data-role="listview" id="tellist" data-inset="true" data-split-theme="a">
+				<li data-role="list-divider">전화예매</li>
+				<li><a href="tel:15442280">CGV</a></li> 
+				<li><a href="tel:15448855"> 롯데시네마</a></li> 
+				<li><a href="tel:15440600">메가박스</a></li>
+				</ul>
+				<br>
+				<br>
+				<a href="http://ticket.movie.naver.com/Ticket/Reserve.aspx" data-role="button" data-theme="b">네이버 인터넷 예매</a> 
+			</div>
+	   	</div>
+   		
+   		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
+		   			<li id="searchonline"><a href="#searchonlinepage" data-icon="star">실시간순위</a></li>
+		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
+		   			<li id="arroundteather"><a href="#" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
