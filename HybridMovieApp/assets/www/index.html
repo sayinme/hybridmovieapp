@@ -23,7 +23,8 @@
 	   $("#[data-role=page]").live("pageshow",function(event) { 
 
 	          if(this.id == "searchonlinepage") { 
-				  $.ajax({
+	        	  $.mobile.showPageLoadingMsg();
+	        	  $.ajax({
 					  	type:"GET",
 						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
 						dataType: "xml",
@@ -60,6 +61,9 @@
 		  				});	
 		  			}
 			  		$("#resultlist2").listview('refresh');
+			  		$.mobile.hidePageLoadingMsg();
+
+
 			  	} 
 	   });
 
@@ -95,6 +99,7 @@
  	  		
  	  		$("#callXML").click(function(){
 		  		$("#resultlist").empty();
+		  		$.mobile.showPageLoadingMsg();
 		  		varinit();
 	 	  		movieName = $.trim($("#movieName").val());
 			  	if(movieName.length > 0)
@@ -143,6 +148,7 @@
 			  		}
 			  	}
 		  		$("#resultlist").listview('refresh');
+		  		$.mobile.hidePageLoadingMsg();
 		  	}
 	  	}); 
 	  </script>
@@ -169,7 +175,7 @@
 		   			<li id="usersearch"><a href="#" class="ui-btn-active" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#searchonlinepage" data-ajax = "false" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
+		   			<li id="arroundteather"><a href="map.html" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 

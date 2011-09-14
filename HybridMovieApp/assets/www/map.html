@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>OpenAPI Map Test - 지도의 이동,확대, 축소 및 중심점 이동</title>
+		<!-- prevent IE6 flickering -->
+		<script type="text/javascript">
+			try {document.execCommand('BackgroundImageCache', false, true);} catch(e) {}
+		</script>
+<script type="text/javascript" src="http://openapi.map.naver.com/openapi/naverMap.naver?ver=2.0&key=db13514ebf38ccd279a6b93538f88bca"></script>
+ </head>
+ <body>
+ <div id = "testMap" style="border:1px solid #000; width:500px; height:400px; margin:20px;"></div>
+ <button onclick="javascript:setMapLevel(5);">Level 5</button>
+ <button onclick="javascript:setMapLevel(6);">Level 6</button>
+ <button onclick="javascript:setMapLevel(7);">Level 7</button>
+ <button onclick="javascript:setMapLevel(8);">Level 8</button>
+ <button onclick="javascript:setMapLevel(9);">Level 9</button>
+ <button onclick="javascript:setMapLevel(10);">Level 10</button>
+ <button onclick="javascript:setMapLevel(11);">Level 11</button>
+ <button onclick="javascript:setMapLevel(12);">Level 12</button>
+ <br />
+ <button onclick="javascript:goPanning();">위치 이동</button>
+ <br />
+ <button onclick="javascript:revertPanning();">위치 원래대로</button>
+		<script type="text/javascript">
+			var oPoint = new nhn.api.map.LatLng(37.5010226, 127.0396037);
+			nhn.api.map.setDefaultPoint('LatLng');
+			oMap = new nhn.api.map.Map('testMap', {
+						point : oPoint,
+						zoom : 6, // - 초기 줌 레벨은 6으로 둔다.
+						enableWheelZoom : false,
+						enableDragPan : true,
+						enableDblClickZoom : false,
+						mapMode : 0,
+						activateTrafficMap : false,
+						activateBicycleMap : false,
+						minMaxLevel : [ 1, 14 ],
+						size : new nhn.api.map.Size(300, 300)
+					});
+					
+			var defaultBounds = oMap.getBound();
+			var defaultCenter = oMap.getCenter();
+			var defaultLevel = oMap.getLevel();
+			var defaultMapMode = oMap.getMapMode();
+			
+			function setMapLevel(val) {
+				oMap.setLevel(val); // - 지도의 레벨을 특정 값으로 설정합니다.
+			}
+			
+			function goPanning() {
+				var tempZoomOptions = { useEffect : true, centerMark : true }; // - 줌 옵션을 설정합니다.
+				oMap.setCenterBy(20, -10, tempZoomOptions); // - 20 pixel 만큼 오른쪽으로 이동합니다.
+			}
+			
+			function revertPanning() {
+				oMap.setCenter(oPoint); // - 지도 생성시 지정한 중심점으로 중심점을 설정한다.
+			}
+		</script>
+ </body>
+</html>
