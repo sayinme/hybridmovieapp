@@ -29,6 +29,7 @@
 						dataType: "xml",
 						success: parseXml
 				  });	
+				  $("#resultlist2").empty();
 	          }
 	        
 	          function parseXml(xml)
@@ -42,7 +43,7 @@
 		  					if($(this).find("S").text() == "*")
 					  		{
 					  			sign = "same.png"	
-					  			$("#resultlist2").append("<li><img src='"+ i +".png'>" + $(this).find("K").text()+"<img src='" + sign +"'></li>");
+					  			$("#resultlist2").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'></li>");
 					  		}
 		  					else
 		  					{
@@ -54,7 +55,7 @@
 						  		{
 						  			sign = "down.png"
 						  		}
-					  			$("#resultlist2").append("<li><img src='"+ i +".png'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
+					  			$("#resultlist2").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
 		  					}
 		  				});	
 		  			}
@@ -155,7 +156,7 @@
    		<div data-role="footer" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
-		   			<li id="usersearch"><a href="#" data-icon="search">영화검색</a></li>
+		   			<li id="usersearch"><a href="#" class="ui-btn-active" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#searchonlinepage" data-ajax = "false" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
 		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
@@ -181,7 +182,7 @@
 			<div data-role="navbar">
 				<ul>
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
-		   			<li id="searchonline"><a href="#" data-icon="star">실시간순위</a></li>
+		   			<li id="searchonline"><a href="#" class="ui-btn-active" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
 		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
 				</ul>
@@ -214,7 +215,7 @@
 				<ul>
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#searchonlinepage" data-icon="star">실시간순위</a></li>
-		   			<li id="reservemovie"><a href="#" data-icon="check">영화예매</a></li>
+		   			<li id="reservemovie"><a href="#" class="ui-btn-active" data-icon="check">영화예매</a></li>
 		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
@@ -247,7 +248,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#searchonlinepage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="#" data-icon="info">주변극장</a></li>
+		   			<li id="arroundteather"><a href="#" class="ui-btn-active" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
