@@ -43,7 +43,7 @@
 		  					if($(this).find("S").text() == "*")
 					  		{
 					  			sign = "same.png"	
-					  			$("#resultlist2").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'></li>");
+					  			$("#resultlist2").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"' data-iconpos='right'></li>");
 					  		}
 		  					else
 		  					{
@@ -74,6 +74,14 @@
  	  		var loadpage = 1;
  	  		var display = 0;
  	  		var movieName ='';
+
+ 	  		function varinit()
+ 	  		{
+ 	  			loadpage = 1;
+	 	  		display = 0;
+	 	  		movieName ='';
+			  	
+ 	  		}
  	  		
  	  		function callAjax()
 		  	{
@@ -87,8 +95,8 @@
  	  		
  	  		$("#callXML").click(function(){
 		  		$("#resultlist").empty();
-		  		
-			  	movieName = $.trim($("#movieName").val());
+		  		varinit();
+	 	  		movieName = $.trim($("#movieName").val());
 			  	if(movieName.length > 0)
 			  	{
 				  	callAjax();
@@ -106,6 +114,7 @@
 		  	function parseXml2(xml)
 		  	{	
 		  		var imgurl = '';
+		  		var total = 0;
 			  	$(xml).find("item").each(function()
 			  	{
 			  		if($(this).find("image").text() == '')
@@ -119,21 +128,22 @@
 				  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "' data-ajax=”false”><img src='" + imgurl + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p><img src='star.png'>" + $(this).find("userRating").text() + "</a></li>");
 			  	});
 			  	
-			  	if($(xml).find("total").text() > 10)
+			  	total = parseInt($(xml).find("total").text());
+			  	if(total > 10)
 			  	{
-			  		display = $(xml).find("display").text();
+			  		display = parseInt($(xml).find("display").text());
 			  		loadpage = loadpage + display;
-			  		
-			  		$("#resultlist").append("<li id=loadmore data-theme='b'>Load more..</li>");
-			  		$("#loadmore").click(function(){
-			  			$("#loadmore").remove();
-			  			callAjax();
-				  	});  		
+			  		if(total >= loadpage)
+			  		{
+			  			$("#resultlist").append("<li id=loadmore data-theme='b'>Load more..</li>");
+				  		$("#loadmore").click(function(){
+				  			$("#loadmore").remove();
+				  			callAjax();
+					  	});	
+			  		}
 			  	}
-			  	
 		  		$("#resultlist").listview('refresh');
 		  	}
-		  	
 	  	}); 
 	  </script>
 	  
