@@ -9,7 +9,6 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
-	<!-- <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script> -->
 	  
 	<style type="text/css">
 	  	h1{
@@ -30,7 +29,7 @@
 						dataType: "xml",
 						success: parseXml
 				  });	
-				  $("#resultlist2").empty();
+				  $("#onlinelist").empty();
 	          }
 	        
 	          function parseXml(xml)
@@ -44,7 +43,7 @@
 		  					if($(this).find("S").text() == "*")
 					  		{
 					  			sign = "same.png"	
-					  			$("#resultlist2").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"' data-iconpos='right'></li>");
+					  			$("#onlinelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"' data-iconpos='right'></li>");
 					  		}
 		  					else
 		  					{
@@ -56,14 +55,12 @@
 						  		{
 						  			sign = "down.png"
 						  		}
-					  			$("#resultlist2").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
+					  			$("#onlinelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
 		  					}
 		  				});	
 		  			}
-			  		$("#resultlist2").listview('refresh');
+			  		$("#onlinelist").listview('refresh');
 			  		$.mobile.hidePageLoadingMsg();
-
-
 			  	} 
 	   });
 
@@ -84,7 +81,6 @@
  	  			loadpage = 1;
 	 	  		display = 0;
 	 	  		movieName ='';
-			  	
  	  		}
  	  		
  	  		function callAjax()
@@ -120,50 +116,56 @@
 		  	{	
 		  		var imgurl = '';
 		  		var total = 0;
-			  	$(xml).find("item").each(function()
-			  	{
-			  		if($(this).find("image").text() == '')
-			  		{
-			  			imgurl = "noimage.png";	
-			  		}
-			  		else
-			  		{
-			  			imgurl = $(this).find("image").text();
-			  		}
-				  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "' data-ajax=”false”><img src='" + imgurl + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p><img src='star.png'>" + $(this).find("userRating").text() + "</a></li>");
-			  	});
-			  	
-			  	total = parseInt($(xml).find("total").text());
-			  	if(total > 10)
-			  	{
-			  		display = parseInt($(xml).find("display").text());
-			  		loadpage = loadpage + display;
-			  		if(total >= loadpage)
-			  		{
-			  			$("#resultlist").append("<li id=loadmore data-theme='b'>Load more..</li>");
-				  		$("#loadmore").click(function(){
-				  			$("#loadmore").remove();
-				  			callAjax();
-					  	});	
-			  		}
-			  	}
+		  		if($(xml).find("item").length == 0)
+		  		{
+		  			$("#resultlist").append("<p align='center'>검색결과가 없습니다</p>");
+		  		}
+		  		else
+		  		{
+				  	$(xml).find("item").each(function()
+				  	{
+				  		if($(this).find("image").text() == '')
+				  		{
+				  			imgurl = "noimage.png";	
+				  		}
+				  		else
+				  		{
+				  			imgurl = $(this).find("image").text();
+				  		}
+					  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "' data-ajax=”false”><img src='" + imgurl + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p><img src='star.png'>" + $(this).find("userRating").text() + "</a></li>");
+				  	});
+				  	
+				  	total = parseInt($(xml).find("total").text());
+				  	if(total > 10)
+				  	{
+				  		display = parseInt($(xml).find("display").text());
+				  		loadpage = loadpage + display;
+				  		if(total >= loadpage)
+				  		{
+				  			$("#resultlist").append("<li id=loadmore data-theme='b'>Load more..</li>");
+					  		$("#loadmore").click(function(){
+					  			$("#loadmore").remove();
+					  			callAjax();
+						  	});	
+				  		}
+				  	}
+		  		}
 		  		$("#resultlist").listview('refresh');
 		  		$.mobile.hidePageLoadingMsg();
+		  		
 		  	}
 	  	}); 
 	  </script>
 	  
   </head>
-  <body> <!-- onload="onLoad();" -->
+  <body>  
   	<div data-role="page" id="usersearchpage">
 	  	<div data-role="header">
-	  		<h1>Naver with Jquery</h1>
+	  		<h1>Naver Movie</h1>
 	  	</div> 
 	  	<div data-role="content">
-	  		<div data-role="fieldcontain" id="inputsearch">
-	  			<input type="text" id="movieName" value="" autocomplete="on" >
+	  			<input type="search" id="movieName" value="" autocomplete="on" >
 	  			<input id="callXML" type="button" value="Search"/>
-	  		</div>
 			<div id="result">
 				<ul data-role="listview" id="resultlist" data-inset="true" data-split-theme="a">
 				</ul>
@@ -182,14 +184,13 @@
    	</div>
 
    	<div data-role="page" id="searchonlinepage">
-	  	
 	  	<div data-role="header">
-	  		<h1>Naver with Jquery</h1>
+	  		<h1>Naver Movie</h1>
 	  	</div> 
 	  	 
 	  	<div data-role="content">
 			<div id="result">
-				<ul data-role="listview" id="resultlist2" data-inset="true" data-split-theme="a">
+				<ul data-role="listview" id="onlinelist" data-inset="true" data-split-theme="a">
 				</ul>
 			</div>
 	   	</div>
@@ -207,9 +208,8 @@
    	</div>
    	
    	<div data-role="page" id="reservecallpage">
-	  	
 	  	<div data-role="header">
-	  		<h1>Naver with Jquery</h1>
+	  		<h1>Naver Movie</h1>
 	  	</div> 
 	  	 
 	  	<div data-role="content">
@@ -239,9 +239,8 @@
    	</div>
    	
    	<div data-role="page" id="arroundteatherpage">
-	  	
 	  	<div data-role="header">
-	  		<h1>Naver with Jquery</h1>
+	  		<h1>Naver Movie</h1>
 	  	</div> 
 	  	 
 	  	<div data-role="content">
