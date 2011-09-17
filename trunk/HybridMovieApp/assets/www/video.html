@@ -1,0 +1,60 @@
+<!DOCTYPE HTML> 
+<html> 
+<head> 
+	<title>MovieSearchApp</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
+	
+	<style	type="text/css">
+		video
+		{
+			width: 150px;
+			position:relative;
+			left:50%;
+			margin-left: 75px;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		var video = document.getElementById('videoplay'); 
+		video.addEventListener('click',function(){
+			video.play();	
+		},false);	
+	</script>
+</head> 
+<body>  
+	<div data-role="page" id="usersearchpage">
+	  	<div data-role="header">
+	  		<h1>Naver Movie</h1>
+	  	</div> 
+	  	
+		<div class="container"> 
+		<!-- <video id="videoplay"  height="100" width="133" controls preload="false" onclick="this.paly()"> --> 
+		<video id="videoplay"  height="100" width="150" poster="pos.png"> 
+	   			<source src="BigBuck.mp4"/>
+	   			<source src="BigBuck.mp4" type="video/mp4"/>
+					   			  
+				<!-- <source src="http://www.w3schools.com/html5/movie.mp4"></source>
+	      		<source src="http://www.w3schools.com/html5/movie.webm"></source>
+	      		<source src="http://www.w3schools.com/html5/movie.ogg"></source> -->
+				
+		</video> 
+		</div>
+		
+		<div data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+		   			<li id="usersearch"><a href="index.html" data-icon="search">영화검색</a></li>
+		   			<li id="searchonline"><a href="index.html" data-icon="star">실시간순위</a></li>
+		   			<li id="reservemovie"><a href="index.html" data-icon="check">영화예매</a></li>
+		   			<li id="arroundteather"><a href="#" class="ui-btn-active" data-icon="info">주변극장</a></li>
+				</ul>
+			</div>
+		</div>  
+   	</div>
+</body> 
+</html> 
