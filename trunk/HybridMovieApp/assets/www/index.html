@@ -14,18 +14,22 @@
 	<style type="text/css">
 	  	h1
 	  	{text-align: center; color: green;}
-	  	p
+  	  	p
 	  	{font-size: 12px;}
 	  	
 	  	#realtimetitle
 	  	{margin: 6px; padding: 6px; float: left;}
-	  	
-		#movieName
-		{float: left;}
-
+		
+		video
+		{
+			width: 150px;
+			position:relative;
+			left:50%;
+			margin-left: 75px;
+		}
 	 </style>
 	 
-	  <script> 
+	  <script>
 	  /* 	document.addEventListener("deviceready",onDeviceReady, false);
 	 	
 	 	function onDeviceReady()
@@ -44,7 +48,7 @@
 	 		else{
 	 			alert('enjoy!');
 	 		}
-	 	}  */
+	 	}  */ 
 	 	
 	   $("#[data-role=page]").live("pageshow",function(event) { 
 			if(this.id == "usersearchpage")
@@ -151,7 +155,7 @@
 		        {
 		        	$("#realtimelist").empty();
 		        	$.ajax({
-						type:"GET",
+						type:"GET", 
 						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
 						dataType: "xml",
 						success: parseXml,
@@ -194,8 +198,27 @@
 					$("#realtimelist").listview('refresh');
 				  	$.mobile.hidePageLoadingMsg();
 				}
-	        }                           
-	       
+	        }     
+
+	        if(this.id == "teaserpage")
+	        {
+		       
+	        	var video = document.getElementById('videoplay');
+	        	var playbtn = document.getElementById('palybtn');
+	        	 
+	    		playbtn.addEventListener('click',function(){
+	    			alert('teaser');
+	    			video.play();	
+	    		},false);
+
+	    		//if($('videoplay').length > 0)
+	    		//{
+		    	//	alert('go');
+		    	//	$('#playbtn').bind('click',function(){
+			    //		document.play();
+		    	//	});	
+	        }
+
 	   });
 	</script>
 	  
@@ -220,7 +243,7 @@
 		   			<li id="usersearch"><a href="#" class="ui-btn-active" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="video.html" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#teaserpage" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -246,7 +269,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#" class="ui-btn-active" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="video.html" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#teaserpage" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -277,26 +300,27 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#" class="ui-btn-active" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="video.html" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#teaserpage" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
    	</div>
    	 
-   	<div data-role="page" id="arroundteatherpage">
+   	<div data-role="page" id="teaserpage">
 	  	<div data-role="header">
 	  		<h1>Naver Movie</h1>
 	  	</div> 
 	  	 
 	  	<div class="container">
-				<!--<video id="vdo" autobuffer width="200" height="133" poster="pos.jpg">
-	  				<source src="BigBuck.m4v" ></source>
-			        <p>Your browser does not support the video tag.</p>		        
-    			</video>
-    			<ul class="controls">
-    				<li class="play_pause"><p class="control" id="play">Play</p></li>
-    				<li class="time"><p><span id=timer>1</span>' of <span id="duraion">0</span>'</p></li>
-    			</ul>-->
+			<video id="videoplay"  height="100" width="150" > 
+	   			<!-- <source src="BigBuck.mp4"></source>
+	   			<source src="BigBuck.mp4" type="video/mp4"></source>-->
+					   			  
+				<source src="http://www.w3schools.com/html5/movie.mp4"></source>
+	      		<source src="http://www.w3schools.com/html5/movie.webm"></source>
+	      		<source src="http://www.w3schools.com/html5/movie.ogg"></source> 
+			</video> 
+			<input type="button" id="palybtn" value="go"></input>
 	   	</div>
    		
    		<div data-role="footer" data-position="fixed">
@@ -305,7 +329,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="#" class="ui-btn-active" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#" class="ui-btn-active" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
