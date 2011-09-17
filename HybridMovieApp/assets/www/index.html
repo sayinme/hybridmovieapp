@@ -12,18 +12,21 @@
 	<script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
 	
 	<style type="text/css">
-	  	h1{
-	  		text-align: center;
-	  		color: green;
-	  	}
-	  	p{ font-size: 12px;}
-	  	#realtimetitle{margin: 6px; padding: 6px; float: left;}
-	  	#refreshbtn{position: absolute;}
+	  	h1
+	  	{text-align: center; color: green;}
+	  	p
+	  	{font-size: 12px;}
 	  	
+	  	#realtimetitle
+	  	{margin: 6px; padding: 6px; float: left;}
+	  	
+		#movieName
+		{float: left;}
+
 	 </style>
 	 
 	  <script> 
-	  	document.addEventListener("deviceready",onDeviceReady, false);
+	  /* 	document.addEventListener("deviceready",onDeviceReady, false);
 	 	
 	 	function onDeviceReady()
 	 	{
@@ -38,7 +41,10 @@
 	 		{
 	 			alert('인터넷 연결이 끊겼으니 네트워크를 확인해 주시기 바랍니다.');
 	 		}
-	 	}
+	 		else{
+	 			alert('enjoy!');
+	 		}
+	 	}  */
 	 	
 	   $("#[data-role=page]").live("pageshow",function(event) { 
 			if(this.id == "usersearchpage")
@@ -85,10 +91,6 @@
 	 	  			alert('죄송합니다. 다시 시도하여 주시기 바랍니다.');
 	 	  		}
 	 	  		
-/* 			   	$("#resultlist").ajaxError(function(event, request, settings, exception){
-				  	("resultlist").html("Error Calling: " + settings.url + "<br/>HTTP Code: " + request.status);
-			  	});  */
-
 			  	function parseXml2(xml)
 			  	{	
 			  		var imgurl = '';
@@ -135,19 +137,19 @@
 			
 	        if(this.id == "realtimesearchpage") 
 	        { 
-	        	callAjax();
+	        	callrealtime();
 	        	  	//setInterval(function() 
 	        	  	//{
-		        	//	$("#onlinelist").empty();
-		        	//  	callAjax();
+		        	//	$("#realtimelist").empty();
+		        	//  	callrealtime();
 		          	//},10000); 
 	        	$("#refreshbtn").click(function(){
-	        		callAjax();
+	        		callrealtime();
 	        	});
 	        
-		        function callAjax()
+		        function callrealtime()
 		        {
-		        	$("#onlinelist").empty();
+		        	$("#realtimelist").empty();
 		        	$.ajax({
 						type:"GET",
 						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
@@ -173,7 +175,7 @@
 			  				if($(this).find("S").text() == "*")
 						  	{
 						  		sign = "same.png"	
-						  		$("#onlinelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"' data-iconpos='right'></li>");
+						  		$("#realtimelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"' data-iconpos='right'></li>");
 						  	}
 			  				else
 			  				{
@@ -185,20 +187,17 @@
 							  	{
 							  		sign = "down.png"
 							  	}
-						  		$("#onlinelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
+						  		$("#realtimelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
 			  				}
 			  			});	
 			  		}
-					$("#onlinelist").listview('refresh');
+					$("#realtimelist").listview('refresh');
 				  	$.mobile.hidePageLoadingMsg();
 				}
 	        }                           
 	       
 	   });
-
- 	  	//요기
- 	  	
- 	  	</script>
+	</script>
 	  
   </head>
   <body>  
@@ -209,7 +208,7 @@
 	  	<div data-role="content">
 	  			<p> * 영화 제목을 검색해 보세요! </p>
 	  			<input type="search" id="movieName" value="" autocomplete="on" >
-	  			<input id="callXML" type="button" value="Search"/>
+	  			<input type="button" id="callXML" value="검색"/>
 			<div id="result">
 				<ul data-role="listview" id="resultlist" data-inset="true" data-split-theme="a">
 				</ul>
@@ -219,9 +218,9 @@
 			<div data-role="navbar">
 				<ul>
 		   			<li id="usersearch"><a href="#" class="ui-btn-active" data-icon="search">영화검색</a></li>
-		   			<li id="searchonline"><a href="#realtimesearchpage" data-ajax = "false" data-icon="star">실시간순위</a></li>
+		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="video.html" rel="external" data-icon="info">주변극장</a></li>
+		   			<li id="arroundteather"><a href="video.html" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -236,7 +235,7 @@
 			<p id="realtimetitle"> *실시간 급상승 영화검색어 입니다.</p>
 			<input id="refreshbtn" type="button" data-icon="refresh" data-iconpos="notext"/>
 			<div id="result">
-				<ul data-role="listview" id="onlinelist" data-inset="true" data-split-theme="a">
+				<ul data-role="listview" id="realtimelist" data-inset="true" data-split-theme="a">
 				</ul>
 			</div>
 	   	</div>
@@ -247,7 +246,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#" class="ui-btn-active" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
+		   			<li id="arroundteather"><a href="video.html" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -278,7 +277,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#" class="ui-btn-active" data-icon="check">영화예매</a></li>
-		   			<li id="arroundteather"><a href="#arroundteatherpage" data-icon="info">주변극장</a></li>
+		   			<li id="arroundteather"><a href="video.html" data-icon="info">주변극장</a></li>
 				</ul>
 			</div>
 		</div> 
