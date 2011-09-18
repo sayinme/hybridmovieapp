@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+ 	<meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>PhoneGap</title>
+    <link rel="stylesheet" href="master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    	var intervalID;
+    	
+    	function preventBehavior(e) {e.preventDefault();};
+    	
+    	function onWinLoad()
+    	{
+    		alert('1');
+    		document.addEventListener("deviceready",onDeviceReady, false);
+    	}
+    	
+    	function onDeviceReady()
+    	{
+    		alert('2');
+    		var funk = function(position)
+    		{
+    			alert('3');
+    			callback(position.coords.latitude, position.coords.longitude); 
+    		};
+    		
+    		var fail = function(positionError)
+    		{
+    			if (positionError.code == PositionError.PERMISSION_DENIED) {
+    				alert("Permission Denied :: "  + positionError.message);
+    			} else {
+    				alert("Error Code " + positionError.code + " :: "  + positionError.message);
+    			}
+    		}
+
+    		intervalID = navigator.geolocation.watchPosition(funk,fail);
+    	}
+    	
+    	function callback(lat, lon) 
+    	{ 
+    		navigator.geolocation.stop();
+    		alert("Callback :: " + lat + "," + lon);
+    		//print(lat,lon);
+    		
+    		//var geocode = "&geocode=" + lat + "%2C" + lon + "%2C1mi"; 
+    		//var fullUrl = url + geocode; 
+    		//var head = document.getElementsByTagName('head'); 
+    		//var script = document.createElement('script'); 
+    		//script.src = fullUrl; 
+    		//head[0].appendChild(script); 
+    	}
+    
+    </script>
+    
+</head>
+<body>
+hello
+</body>
+</html>
