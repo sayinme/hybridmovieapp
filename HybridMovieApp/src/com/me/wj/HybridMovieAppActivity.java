@@ -1,6 +1,5 @@
 package com.me.wj;
 
-import android.app.Activity;
 import android.os.Bundle;
 import com.phonegap.*;
 
@@ -11,4 +10,12 @@ public class HybridMovieAppActivity extends DroidGap {
         super.onCreate(savedInstanceState);
         super.loadUrl("file:///android_asset/www/index.html");
     }
+
+	/*@Override
+	protected void onStart() {
+		super.onStart();
+		setContentView(R.layout.main);
+	}*/
+    
+    
 }

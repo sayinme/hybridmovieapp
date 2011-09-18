@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>MovieSearchApp</title>
-	<!-- 화면 확대비율을 기기 사이즈 가로에 맞게 조정 -->	
-	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />
@@ -11,9 +11,10 @@
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
 	<script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
 	
+	<script src="movieapp.js"></script>	
 	<style type="text/css">
 	  	h1
-	  	{text-align: center; color: green;}
+	  	{text-align: center; color: #green;}
   	  	p
 	  	{font-size: 12px;}
 	  	
@@ -29,199 +30,6 @@
 		}
 	 </style>
 	 
-	  <script>
-	  /* 	document.addEventListener("deviceready",onDeviceReady, false);
-	 	
-	 	function onDeviceReady()
-	 	{
-	 		checkConnection();	
-	 	}
-	 	
-	 	function checkConnection()
-	 	{
-	 		var networkState = navigator.network.connection.type;
-	 		
-	 		if(networkState == Connection.UNKNOWN)
-	 		{
-	 			alert('인터넷 연결이 끊겼으니 네트워크를 확인해 주시기 바랍니다.');
-	 		}
-	 		else{
-	 			alert('enjoy!');
-	 		}
-	 	}  */ 
-	 	
-	   $("#[data-role=page]").live("pageshow",function(event) { 
-			if(this.id == "usersearchpage")
-			{
-				var loadpage = 1;
-	 	  		var display = 0;
-	 	  		var movieName ='';
-
-	 	  		function varinit()
-	 	  		{
-	 	  			loadpage = 1;
-		 	  		display = 0;
-		 	  		movieName ='';
-	 	  		}
-	 	  		
-	 	  		$("#callXML").click(function(){
-			  		$("#resultlist").empty();
-			  		varinit();
-		 	  		movieName = $.trim($("#movieName").val());
-				  	if(movieName.length > 0)
-				  	{
-				  		$.mobile.showPageLoadingMsg();
-				  		callsearchmovie();
-				  	}
-				  
-				  	else
-				  		alert('please input text');
-			  	}); 
-	 	  		
-	 	  		function callsearchmovie()
-			  	{
-			  		$.ajax({
-					  	type:"GET",
-						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=" + movieName + "&display=10&start="+ loadpage +"&target=movie" ,
-						dataType: "xml",
-						success: parseXml2,
-						error: callsearchmovieerror
-				  	});
-			  	}
-			  	
-	 	  		function callsearchmovieerror()
-	 	  		{
-	 	  			$.mobile.hidePageLoadingMsg();
-	 	  			alert('죄송합니다. 다시 시도하여 주시기 바랍니다.');
-	 	  		}
-	 	  		
-			  	function parseXml2(xml)
-			  	{	
-			  		var imgurl = '';
-			  		var total = 0;
-			  		if($(xml).find("item").length == 0)
-			  		{
-			  			$("#resultlist").append("<p align='center'>검색결과가 없습니다</p>");
-			  		}
-			  		else
-			  		{
-					  	$(xml).find("item").each(function()
-					  	{
-					  		if($(this).find("image").text() == '')
-					  		{
-					  			imgurl = "noimage.png";	
-					  		}
-					  		else
-					  		{
-					  			imgurl = $(this).find("image").text();
-					  		}
-						  	$("#resultlist").append("<li><a href='" + $(this).find("link").text() + "' data-ajax=”false”><img src='" + imgurl + "'><h3>" + $(this).find("title").text() + "</h3><p>" + $(this).find("subtitle").text() + "</p><img src='star.png'>" + $(this).find("userRating").text() + "</a></li>");
-					  	});
-					  	
-					  	total = parseInt($(xml).find("total").text());
-					  	if(total > 10)
-					  	{
-					  		display = parseInt($(xml).find("display").text());
-					  		loadpage = loadpage + display;
-					  		if(total >= loadpage)
-					  		{
-					  			$("#resultlist").append("<li id=loadmore data-theme='b'>Load more..</li>");
-						  		$("#loadmore").click(function(){
-						  			$("#loadmore").remove();
-						  			callsearchmovie();
-							  	});	
-					  		}
-					  	}
-			  		}
-			  		$("#resultlist").listview('refresh');
-			  		$.mobile.hidePageLoadingMsg();
-			  		
-			  	}
-			}
-			
-	        if(this.id == "realtimesearchpage") 
-	        { 
-	        	callrealtime();
-	        	  	//setInterval(function() 
-	        	  	//{
-		        	//	$("#realtimelist").empty();
-		        	//  	callrealtime();
-		          	//},10000); 
-	        	$("#refreshbtn").click(function(){
-	        		callrealtime();
-	        	});
-	        
-		        function callrealtime()
-		        {
-		        	$("#realtimelist").empty();
-		        	$.ajax({
-						type:"GET", 
-						url: "http://openapi.naver.com/search?key=db13514ebf38ccd279a6b93538f88bca&query=movie&target=ranktheme",
-						dataType: "xml",
-						success: parseXml,
-						error: errorr
-					});	
-		        }
-	
-		        function errorr()
-		        {
-		        	alert('죄송합니다. 다시 시도해 주십시오');
-		        }
-		        
-		        function parseXml(xml)
-				{		  
-					var i = 1;
-				  	var sign ;
-				  	for(i=1; i<11; i++)
-				  	{
-			  			$(xml).find("R"+[i]).each(function()
-			  			{
-			  				if($(this).find("S").text() == "*")
-						  	{
-						  		sign = "same.png"	
-						  		$("#realtimelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"' data-iconpos='right'></li>");
-						  	}
-			  				else
-			  				{
-			  					if ($(this).find("S").text() == "+")
-							  	{
-							  		sign = "up.png"	
-							  	}
-							  	else if($(this).find("S").text() == "-")
-							  	{
-							  		sign = "down.png"
-							  	}
-						  		$("#realtimelist").append("<li><img src='"+ i +".png' class='ui-li-icon'>" + $(this).find("K").text()+"<img src='" + sign +"'>" + $(this).find("V").text() +"</li>");
-			  				}
-			  			});	
-			  		}
-					$("#realtimelist").listview('refresh');
-				  	$.mobile.hidePageLoadingMsg();
-				}
-	        }     
-
-	        if(this.id == "teaserpage")
-	        {
-		       
-	        	var video = document.getElementById('videoplay');
-	        	var playbtn = document.getElementById('palybtn');
-	        	 
-	    		playbtn.addEventListener('click',function(){
-	    			alert('teaser');
-	    			video.play();	
-	    		},false);
-
-	    		//if($('videoplay').length > 0)
-	    		//{
-		    	//	alert('go');
-		    	//	$('#playbtn').bind('click',function(){
-			    //		document.play();
-		    	//	});	
-	        }
-
-	   });
-	</script>
-	  
   </head>
   <body>  
   	<div data-role="page" id="usersearchpage">
@@ -231,7 +39,7 @@
 	  	<div data-role="content">
 	  			<p> * 영화 제목을 검색해 보세요! </p>
 	  			<input type="search" id="movieName" value="" autocomplete="on" >
-	  			<input type="button" id="callXML" value="검색"/>
+	  			<input type="button" id="callXML" value="검색">
 			<div id="result">
 				<ul data-role="listview" id="resultlist" data-inset="true" data-split-theme="a">
 				</ul>
@@ -243,7 +51,7 @@
 		   			<li id="usersearch"><a href="#" class="ui-btn-active" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="teaser"><a href="#teaserpage" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#teaserpage" data-icon="info">예고편 감상</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -256,7 +64,7 @@
 	  	 
 	  	<div data-role="content">
 			<p id="realtimetitle"> *실시간 급상승 영화검색어 입니다.</p>
-			<input id="refreshbtn" type="button" data-icon="refresh" data-iconpos="notext"/>
+			<input id="refreshbtn" type="button" data-icon="refresh" data-iconpos="notext">
 			<div id="result">
 				<ul data-role="listview" id="realtimelist" data-inset="true" data-split-theme="a">
 				</ul>
@@ -269,7 +77,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#" class="ui-btn-active" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="teaser"><a href="#teaserpage" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#teaserpage" data-icon="info">예고편 감상</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -282,15 +90,15 @@
 	  	 
 	  	<div data-role="content">
 			<div id="result">
+				<a href="http://ticket.movie.naver.com/Ticket/Reserve.aspx" data-role="button" data-theme="b">네이버 인터넷 예매</a>
+				<br>
+				<br>
 				<ul data-role="listview" id="tellist" data-inset="true" data-split-theme="a">
 				<li data-role="list-divider">전화예매</li>
 				<li><a href="tel:15442280">CGV</a></li> 
 				<li><a href="tel:15448855"> 롯데시네마</a></li> 
 				<li><a href="tel:15440600">메가박스</a></li>
 				</ul>
-				<br>
-				<br>
-				<a href="http://ticket.movie.naver.com/Ticket/Reserve.aspx" data-role="button" data-theme="b">네이버 인터넷 예매</a> 
 			</div>
 	   	</div>
    		
@@ -300,7 +108,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#" class="ui-btn-active" data-icon="check">영화예매</a></li>
-		   			<li id="teaser"><a href="#teaserpage" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#teaserpage" data-icon="info">예고편 감상</a></li>
 				</ul>
 			</div>
 		</div> 
@@ -313,14 +121,14 @@
 	  	 
 	  	<div class="container">
 			<video id="videoplay"  height="100" width="150" > 
-	   			<!-- <source src="BigBuck.mp4"></source>
-	   			<source src="BigBuck.mp4" type="video/mp4"></source>-->
+	   			<!-- <source src="BigBuck.mp4"> 
+	   			<source src="BigBuck.mp4" type="video/mp4">--> 
 					   			  
-				<source src="http://www.w3schools.com/html5/movie.mp4"></source>
-	      		<source src="http://www.w3schools.com/html5/movie.webm"></source>
-	      		<source src="http://www.w3schools.com/html5/movie.ogg"></source> 
+				<source src="http://www.w3schools.com/html5/movie.mp4"> 
+	      		<source src="http://www.w3schools.com/html5/movie.webm"> 
+	      		<source src="http://www.w3schools.com/html5/movie.ogg">  
 			</video> 
-			<input type="button" id="palybtn" value="go"></input>
+			<input type="button" id="palybtn" value="Play"> 
 	   	</div>
    		
    		<div data-role="footer" data-position="fixed">
@@ -329,7 +137,7 @@
 		   			<li id="usersearch"><a href="#usersearchpage" data-icon="search">영화검색</a></li>
 		   			<li id="searchonline"><a href="#realtimesearchpage" data-icon="star">실시간순위</a></li>
 		   			<li id="reservemovie"><a href="#reservecallpage" data-icon="check">영화예매</a></li>
-		   			<li id="teaser"><a href="#" class="ui-btn-active" data-icon="info">주변극장</a></li>
+		   			<li id="teaser"><a href="#" class="ui-btn-active" data-icon="info">예고편 감상</a></li>
 				</ul>
 			</div>
 		</div> 
