@@ -1,0 +1,1 @@
+HTML5+jQuerymobile+PhoneGap 을 이용한 영화 검색 및 실시간 순위를 확인할 수 있는 어플리케이션
